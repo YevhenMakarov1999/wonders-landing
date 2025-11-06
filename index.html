@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>WONDERS</title>
+
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="header">
+    <div class="container header-container">
+
+        <a href="#" class="header-logo-and-text">
+            <svg class="header-logo-image" viewBox="0 0 73 34" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M59.2163 24.5786V20.3137L56.8388 17.985L59.2303 19.3378V12.2281L50.3323 22.2163L47.6113 25.4222L51.3615 23.0116L46.9352 27.6512L46.2931 30H44.3848H40.4802H33.5049L40.4802 28.5327V25.9956V19.5777V3.49431L33.7795 13.7348H36.0542L32.6121 21.8674L29.3541 23.4939L32.1196 24.8199L31.2612 26.3138L28.935 30H25.2665H24.4466H14.3859L24.4466 29.253V25.2797L24.5119 18.2531L21.4236 18.705L24.5886 16.9879L24.6814 12.2594L17.9196 19.2773L18.288 20.9643L14.1075 24.278L16.0133 23.735L9.76091 30H6.27066H5.51648H0L6.36248 28.1088L9.55835 20.9632L13.1242 21.6868L25.2962 8.07215L30.4598 17.7102L32.3042 9.51804L39.5581 0H42.3856L45.4529 8.25277L49.3375 10.7306L50.8526 17.9356L59.2303 9.39784L62.1637 12.1666L68.4511 25.5421L73 30H61.1676H59.7997H59.2303H50.287L59.2303 29.0353V28.0559L56.1492 26.3138L59.2163 24.5786Z" fill="#202020"/>
+            </svg>
+            <span class="header-logo-text">Wonders</span>
+        </a>
+
+        <nav id="header-navigation" class="header-navigation">
+            <a href="#mobileSection">Mobile app</a>
+            <a href="#faqSection">FAQs</a>
+            <a href="#contactSection">Contact</a>
+            <a class="bold-link" href="#signUpSection">Sign Up</a>
+        </nav>
+
+        <!-- фикс: убрал локальную огромную картинку из кнопки -->
+        <button
+                id="burger-icon"
+                class="burger-icon"
+                aria-label="Menu"
+                aria-controls="burger-menu"
+                aria-expanded="false"
+                type="button"
+        >
+            <div id="burger-line1" class="line1"></div>
+            <div id="burger-line2" class="line2"></div>
+            <div id="burger-line3" class="line3"></div>
+        </button>
+    </div>
+
+    <div id="burger-menu" class="burger-menu hidden" role="dialog" aria-modal="true">
+        <nav>
+            <a href="#mobileSection">Mobile app</a>
+            <a href="#faqSection">FAQs</a>
+            <a href="#contactSection">Contact</a>
+            <a class="bold-link" href="#signUpSection">Sign Up</a>
+        </nav>
+    </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<main>
+    <section class="hero container">
+        <div class="hero-left">
+
+            <h1 class="hero-title">
+                Skip The Climbing,<br />
+                Catch The Bus
+            </h1>
+
+            <p class="hero-sub">
+                We sell tickets to the best seats in the house — houses on wheels, that is!
+                Get ready for jaw-dropping views without breaking a sweat.
+            </p>
+
+            <!-- верхняя плашка -->
+            <div class="top-controls">
+                <fieldset class="segmented" role="radiogroup" aria-label="Trip type">
+                    <label>
+                        <input type="radio" name="trip" value="round" />
+                        <span>Round trip</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="trip" value="oneway" checked />
+                        <span>One Way</span>
+                    </label>
+                </fieldset>
+
+                <div class="pax" aria-label="Passengers">
+          <span class="pax-icon" aria-hidden="true">
+            <img src="./assets/images/person%20solid.svg" alt="" />
+          </span>
+                    <button class="pax-btn" type="button" id="dec-pass" aria-label="Decrease passengers">−</button>
+                    <output id="passengers" aria-live="polite">1</output>
+                    <button class="pax-btn" type="button" id="inc-pass" aria-label="Increase passengers">+</button>
+                </div>
+            </div>
+
+            <!-- форма -->
+            <form id="search-form" class="search-card" novalidate>
+                <div class="grid-2">
+
+                    <!-- Departure -->
+                    <div class="field">
+                        <label for="departure-input">Departure</label>
+                        <input id="departure-input" name="departure" type="text" placeholder="Your City/Station" autocomplete="off" />
+                        <ul id="departure-list" class="autocomplete-dropdown hidden" role="listbox"></ul>
+                    </div>
+
+                    <!-- Arrival -->
+                    <div class="field">
+                        <label for="arrival-input">Arrival</label>
+                        <input id="arrival-input" name="arrival" type="text" placeholder="Where to?" autocomplete="off" />
+                        <ul id="arrival-list" class="autocomplete-dropdown hidden" role="listbox"></ul>
+                    </div>
+
+                    <!-- Depart -->
+                    <div class="field date-field">
+                        <label>Depart</label>
+                        <button id="depart-btn" class="date-input-button" type="button">Depart</button>
+                        <output id="depart-output" class="sr-only">Not selected</output>
+
+                        <div class="calendar hidden" id="calendar" role="dialog" aria-label="Choose date">
+                            <div class="months">
+                                <div class="month">
+                                    <div class="calendar-header">
+                                        <button id="prev-month-btn" class="nav-btn" aria-label="Previous month">←</button>
+                                        <div id="left-month-year" class="month-year"></div>
+                                    </div>
+                                    <div class="calendar-body">
+                                        <div class="weekdays">
+                                            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                                        </div>
+                                        <div id="curr-month-dates" class="dates"></div>
+                                    </div>
+                                </div>
+
+                                <div class="month">
+                                    <div class="calendar-header">
+                                        <div id="right-month-year" class="month-year"></div>
+                                        <button id="next-month-btn" class="nav-btn" aria-label="Next month">→</button>
+                                    </div>
+                                    <div class="calendar-body">
+                                        <div class="weekdays">
+                                            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                                        </div>
+                                        <div id="next-month-dates" class="dates"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="calendar-footer">
+                                <button type="button" class="reset-btn" id="reset-btn">Reset</button>
+                                <button type="button" class="apply-btn" id="apply-btn">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Return -->
+                    <div class="field date-field">
+                        <label>Return</label>
+                        <button id="return-btn" class="date-input-button" type="button" disabled>Return</button>
+                        <output id="return-output" class="sr-only">Not selected</output>
+                    </div>
+                </div>
+
+                <button id="find-btn" class="primary-btn" type="submit">Find My Alpine Ride</button>
+                <div id="errors" class="errors" aria-live="polite"></div>
+            </form>
+        </div>
+
+        <div class="hero-right">
+            <img src="./assets/images/hero.png" alt="Alpine mountains illustration" class="hero-img" />
+        </div>
+    </section>
+</main>
+
+<!-- ================= STATS BAND ================= -->
+<section class="stats-band fullwidth">
+    <div class="container">
+        <div class="stats">
+            <div class="stat"><div class="num">68k+</div><div class="cap">Track kilometers</div></div>
+            <div class="stat"><div class="num">1.4M+</div><div class="cap">Photos Taken</div></div>
+            <div class="stat"><div class="num">23M+</div><div class="cap">Altitude Gained</div></div>
+            <div class="stat"><div class="num">165+</div><div class="cap">Years of history</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= GALLERY ================= -->
+<section class="gallery" id="glimpses">
+    <div class="container">
+        <h2 class="gallery-title" style="font-weight: 800;">Glimpses of Glory</h2>
+
+        <div class="gallery-grid">
+            <!-- 1: Snow road (wide) -->
+            <figure class="item item--wide">
+                <img src="./assets/images/Snow road.svg" alt="Misty alpine road">
+            </figure>
+            <!-- 2: Matterhorn -->
+            <figure class="item">
+                <img src="./assets/images/Matterhorn.svg" alt="Matterhorn peak">
+            </figure>
+            <!-- 3: Alpine pass -->
+            <figure class="item">
+                <img src="./assets/images/Alpine pass.svg" alt="Mountain serpentine road">
+            </figure>
+            <!-- 4: Bus in Alps -->
+            <figure class="item">
+                <img src="./assets/images/Bus in Alps.svg" alt="Bus in the Alps">
+            </figure>
+            <!-- 5: Cloudy ridge -->
+            <figure class="item">
+                <img src="./assets/images/Cloudy ridge.svg" alt="Snowy mountain pass">
+            </figure>
+        </div>
+    </div>
+</section>
+
+<!-- APP DOWNLOAD BANNER -->
+<section class="app-banner" id="mobileSection">
+    <div class="container app-banner-inner">
+        <h2 class="app-banner-title">
+            Free downloads app now!
+        </h2>
+        <div class="store-row">
+            <a class="store-badge" href="#">
+                <img src="./assets/images/googleplay.svg" alt="Get it on Google Play">
+            </a>
+            <a class="store-badge" href="#">
+                <img src="./assets/images/Appgallery.png" alt="Explore it on AppGallery">
+            </a>
+            <a class="store-badge" href="#">
+                <img src="./assets/images/appstore.svg" alt="Download on the App Store">
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faqSection">
+    <div class="container faq-inner">
+        <h2 class="faq-title">FAQs.</h2>
+
+        <div class="faq-item faq-item--open">
+            <button class="faq-head">
+                <span class="faq-q">Alpine Bus Journeys?</span>
+                <span class="faq-toggle">✕</span>
+            </button>
+            <div class="faq-body">
+                <p>
+                    Forget crowded cities! Alpine Bus Journeys are your comfy seat with panoramic windows
+                    to breathtaking mountain vistas, charming villages, and air so fresh it might make you yodel
+                    (please don’t, unless you’re outside). It’s transportation with a side of unparalleled scenery
+                    (and maybe a hairpin turn).
+                </p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-head">
+                <span class="faq-q">What about seating options ?</span>
+                <span class="faq-toggle">+</span>
+            </button>
+            <div class="faq-body">
+                <p>Generally, you'll find comfy standard seats (great views, great value, maybe great new friends) and perhaps slightly better seats with extra legroom. All offer a front-row seat to the greatest show on Earth – the Alps!.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-head">
+                <span class="faq-q">My Altitude Score ?</span>
+                <span class="faq-toggle">+</span>
+            </button>
+            <div class="faq-body">
+                <p>Your loyalty points for cruising the mountain roads! Higher scores might get you priority boarding (less elbowing for the best window seat!) or maybe just bragging rights among fellow peak-passengers who prefer four wheels.
+                    .</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-head">
+                <span class="faq-q">Why a Bus Station Fee ?</span>
+                <span class="faq-toggle">+</span>
+            </button>
+            <div class="faq-body">
+                <p>A small contribution to ensure the station is clean, has reasonably fresh mountain air (filtered from bus fumes), and enough signs pointing you towards your bus, not away from it. Sometimes covers the cost of moving rogue bicycles.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-head">
+                <span class="faq-q">Why are buses late ?</span>
+                <span class="faq-toggle">+</span>
+            </button>
+            <div class="faq-body">
+                <p>Sometimes it's the weather (snow happens!), sometimes a sudden flock of particularly slow-moving sheep on the road, and sometimes the driver just had to stop for a photo of that view. Or maybe they got stuck behind a tractor. Welcome to "Mountain Road Time"!</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-head">
+                <span class="faq-q">Peak Season Surcharge ?</span>
+                <span class="faq-toggle">+</span>
+            </button>
+            <div class="faq-body">
+                <p>t's the little extra you pay to enjoy the authentic experience of sharing breathtaking views with a lot of your closest friends (who you haven't met yet) while strategically placing your bag in the overhead compartment. Guarantees a vibrant, energetic journey!</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT + FOOTER WRAP -->
+<section class="contact-and-footer" id="contactSection">
+    <div class="contact-wrapper">
+        <div class="contact-card">
+            <h2 class="contact-title">Contact us</h2>
+
+            <div class="contact-phone">+41 98765 43210</div>
+            <div class="contact-mail">hello@peakpasses.eu</div>
+
+            <div class="contact-address">
+                Alpenblick Strasse 7,<br />
+                12345 Edelweiss Town, Alps
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+
+            <div class="footer-brand">
+                <div class="footer-logo-row">
+                    <img class="footer-logo-icon" src="./assets/images/logo-small.svg" alt="" />
+                    <span class="footer-logo-text">Wonders</span>
+                </div>
+
+                <div class="footer-legal">
+                    <div>English. © 2025 Peak Passages.</div>
+                    <div>All Rights Reserved (Especially the Window Seats).</div>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <div class="footer-col-title">About</div>
+                <ul class="footer-links">
+                    <li><a href="#">How it works</a></li>
+                    <li><a href="#">Featured</a></li>
+                    <li><a href="#">Partnership</a></li>
+                    <li><a href="#">Business Relation</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <div class="footer-col-title">Community</div>
+                <ul class="footer-links">
+                    <li><a href="#">Events</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Podcast</a></li>
+                    <li><a href="#">Invite a friend</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <div class="footer-col-title">Socials</div>
+                <ul class="footer-links">
+                    <li><a href="#">Discord</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">Facebook</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </footer>
+</section>
+
+</body>
+</html>
