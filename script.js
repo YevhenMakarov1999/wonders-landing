@@ -1,5 +1,5 @@
 /***********************
- * Stations (как было)
+ * Stations
  ***********************/
 const STATIONS = [
     "Zermatt Bus Terminal","Interlaken Ost Bus Station","Grindelwald Bus Terminal","Lauterbrunnen Bahnhof","Lucerne Bahnhofquai",
@@ -16,7 +16,7 @@ const STATIONS = [
 ];
 
 /***********************
- * Burger menu (единая реализация)
+ * Burger menu
  ***********************/
 (() => {
     const burgerBtn  = document.getElementById('burger-icon');
@@ -26,7 +26,7 @@ const STATIONS = [
     const TRANSITION_MS = 200;
 
     const openMenu = () => {
-        // показать и запустить анимацию
+
         burgerMenu.classList.remove('hidden');
         requestAnimationFrame(() => burgerMenu.classList.add('open'));
         document.body.classList.add('no-scroll');
@@ -36,12 +36,12 @@ const STATIONS = [
 
     const closeMenu = () => {
         burgerMenu.classList.remove('open');
-        // после окончания transition спрятать display:none
+
         const onEnd = () => {
             burgerMenu.classList.add('hidden');
             burgerMenu.removeEventListener('transitionend', onEnd);
         };
-        // подстраховка таймером
+
         burgerMenu.addEventListener('transitionend', onEnd);
         setTimeout(onEnd, TRANSITION_MS + 20);
 
@@ -52,16 +52,16 @@ const STATIONS = [
 
     const isOpen = () => burgerMenu.classList.contains('open');
 
-    // клик по кнопке — только тоггл (без «мигания»)
+
     burgerBtn.addEventListener('click', (e) => {
-        e.stopPropagation();            // чтобы глобальный клик не закрыл мгновенно
+        e.stopPropagation();
         isOpen() ? closeMenu() : openMenu();
     });
 
-    // клики внутри меню не закрывают
+
     burgerMenu.addEventListener('click', (e) => {
         e.stopPropagation();
-        // клик по ссылке — закрыть
+
         if (e.target.closest('a')) closeMenu();
     });
 
@@ -79,7 +79,7 @@ const STATIONS = [
 })();
 
 /***********************
- * Autocomplete (как было)
+ * Autocomplete
  ***********************/
 function makeAutocomplete(inputId, listId){
     const input = document.getElementById(inputId);
@@ -108,7 +108,7 @@ function makeAutocomplete(inputId, listId){
 
     input.addEventListener('focus', ()=>{ list.classList.remove('hidden'); render(input.value); });
     input.addEventListener('input', e => render(e.target.value));
-    // blur через таймаут, чтобы успел mousedown по пункту
+
     input.addEventListener('blur', ()=> setTimeout(()=> list.classList.add('hidden'), 120));
 
     list.addEventListener('mousedown', e=>{
@@ -141,7 +141,7 @@ makeAutocomplete('arrival-input','arrival-list');
 })();
 
 /***********************
-* POPUP CALENDAR (один на два поля) + ограничения дат
+* POPUP CALENDAR
 ***********************/
 (() => {
     // элементы интерфейса
@@ -161,24 +161,24 @@ makeAutocomplete('arrival-input','arrival-list');
     const nextDatesEl = document.getElementById('next-month-dates');
 
     // состояние
-    let activeBtn = null;             // какая кнопка открыла поповер
-    let activeOut = null;             // куда писать (output)
-    let viewDate  = new Date();       // левый месяц
-    let selDepart = null;             // Date | null
-    let selReturn = null;             // Date | null
+    let activeBtn = null;
+    let activeOut = null;
+    let viewDate  = new Date();
+    let selDepart = null;
+    let selReturn = null;
 
-    // утилиты
+
     const today0 = (() => { const d=new Date(); d.setHours(0,0,0,0); return d; })();
     const isBefore = (a,b) => a.getTime() < b.getTime();
     const fmt = d => d.toLocaleDateString('en', { day:'numeric', month:'long', year:'numeric' });
 
-    // построение сетки месяца с учётом "минимально допустимой" даты
+
     function renderMonth(container, y, m, minAllowedDate){
         container.innerHTML = '';
         const first = new Date(y, m, 1);
         const total = new Date(y, m+1, 0).getDate();
 
-        // Mon-based смещение
+
         const lead = (first.getDay() + 6) % 7;
         for (let i=0;i<lead;i++){
             const s = document.createElement('span');
@@ -209,15 +209,14 @@ makeAutocomplete('arrival-input','arrival-list');
         leftHeader.textContent  = left.toLocaleDateString('en', { month:'long', year:'numeric' });
         rightHeader.textContent = right.toLocaleDateString('en', { month:'long', year:'numeric' });
 
-        // Минимально разрешённая дата:
-        // - для Depart → сегодня
-        // - для Return → либо сегодня (если Depart не выбран), либо дата Depart
+
+
         const minAllowed = (activeBtn === returnBtn && selDepart) ? selDepart : today0;
 
         renderMonth(currDatesEl, left.getFullYear(),  left.getMonth(),  minAllowed);
         renderMonth(nextDatesEl, right.getFullYear(), right.getMonth(), minAllowed);
 
-        // проставляем selected (если попадают в диапазон)
+
         const mark = (date, cont) => {
             if(!date) return;
             const y = +date.getFullYear(), m = +date.getMonth(), d = +date.getDate();
@@ -231,32 +230,32 @@ makeAutocomplete('arrival-input','arrival-list');
         mark(selReturn, currDatesEl); mark(selReturn, nextDatesEl);
     }
 
-    // начальный рендер
+
     render();
 
-    // навигация месяцев
+
     prevBtn.addEventListener('click', ()=>{ viewDate.setMonth(viewDate.getMonth()-1); render(); });
     nextBtn.addEventListener('click', ()=>{ viewDate.setMonth(viewDate.getMonth()+1); render(); });
 
-    // выбор дня
+
     function onDateClick(e){
         const btn = e.target.closest('.date'); if(!btn) return;
         if (btn.disabled) return; // не даём выбрать запрещённый день
 
         const d = new Date(+btn.dataset.y, +btn.dataset.m, +btn.dataset.d);
 
-        // Для Return не разрешаем дату раньше Depart (доп. страховка)
+
         if (activeBtn === returnBtn && selDepart && isBefore(d, selDepart)) {
             return; // просто игнорируем
         }
 
-        // выделяем (UI)
+
         cal.querySelectorAll('.date.selected').forEach(x=>x.classList.remove('selected'));
         btn.classList.add('selected');
 
         if (activeBtn === departBtn){
             selDepart = d;
-            // если return уже выбран раньше — сбросим его (чтобы не остался невалид)
+
             if (selReturn && isBefore(selReturn, selDepart)) selReturn = null;
         } else if (activeBtn === returnBtn){
             selReturn = d;
@@ -265,13 +264,13 @@ makeAutocomplete('arrival-input','arrival-list');
     currDatesEl.addEventListener('click', onDateClick);
     nextDatesEl.addEventListener('click', onDateClick);
 
-    // открыть под конкретной кнопкой
+
     function openFor(btn, out){
         activeBtn = btn; activeOut = out || null;
-        // переносим календарь внутрь соответствующего .field
+
         const field = btn.closest('.field'); if (field) field.appendChild(cal);
         cal.classList.remove('hidden');
-        // при открытии пересоберём сетку под актуальные ограничения
+
         render();
     }
 
@@ -305,7 +304,7 @@ makeAutocomplete('arrival-input','arrival-list');
             if(returnOut) returnOut.textContent='Not selected';
         }
         cal.querySelectorAll('.date.selected').forEach(x=>x.classList.remove('selected'));
-        render(); // перерисуем с новыми ограничениями
+        render();
     });
 
     // открыть по клику
@@ -340,7 +339,7 @@ makeAutocomplete('arrival-input','arrival-list');
             // скрыть календарь, если он открыт под Return
             if (!cal.classList.contains('hidden') && activeBtn === returnBtn) cal.classList.add('hidden');
         }
-        // пересоберём сетку (вдруг изменения повлияли на minAllowed)
+        //
         render();
     }
     one?.addEventListener('change', toggleReturn);
@@ -348,7 +347,7 @@ makeAutocomplete('arrival-input','arrival-list');
     toggleReturn();
 })();
 /***********************
- * Form validation (как было)
+ * Form validation
  ***********************/
 (() => {
     const form   = document.getElementById('search-form');
@@ -374,7 +373,7 @@ makeAutocomplete('arrival-input','arrival-list');
 })();
 
 /***********************
- * FAQ accordion (один открыт, доступный)
+ * FAQ accordion
  ***********************/
 (() => {
     const root  = document.getElementById('faqSection') || document;
